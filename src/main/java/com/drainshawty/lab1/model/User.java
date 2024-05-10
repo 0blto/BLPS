@@ -12,7 +12,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -34,22 +36,27 @@ public class User implements Serializable, UserDetails {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private long userId;
+    long userId;
 
     @Email
     @NotNull
-    private String email;
+    String email;
 
     @NotNull
-    private String password;
+    String password;
 
     @NotNull
-    private String name;
+    String name;
+
+    @OneToMany(mappedBy = "customer")
+    Set<Cart> cart;
+
+
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    Set<Role> roles;
 
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).toList();

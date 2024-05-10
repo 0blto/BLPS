@@ -9,6 +9,10 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 @Entity
 @Table
 @Data
@@ -17,7 +21,7 @@ public class Product {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private Long id;
+    Long id;
 
     @NotNull
     String name;
