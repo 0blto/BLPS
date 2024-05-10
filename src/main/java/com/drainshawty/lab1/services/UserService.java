@@ -44,13 +44,15 @@ public class UserService {
         return this.get(email);
     }
 
-    @Transactional public void delete(String email) {
+    @Transactional
+    public void delete(String email) {
         repo.delete(this.repo.getByEmail(email));
         try {
             mailer.send(email, "Goodbye", ":(");
         } catch (MailSendException e) { System.out.println("[ERROR] " + e.getLocalizedMessage()); }
     }
 
+    @Transactional
     public boolean restorePassword(String email) {
         try {
             mailer.send(email, "Your password", this.get(email).get().getPassword());

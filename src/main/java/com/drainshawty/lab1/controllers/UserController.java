@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/user")
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
     JWTUtil jwtUtil;
     UserService service;

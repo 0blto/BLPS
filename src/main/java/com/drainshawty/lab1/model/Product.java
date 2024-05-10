@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -14,9 +13,14 @@ import java.util.HashSet;
 import java.util.List;
 
 @Entity
-@Table
+@Table(
+        uniqueConstraints = {@UniqueConstraint(columnNames = "name")}
+)
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
