@@ -52,7 +52,7 @@ public class User implements Serializable, UserDetails {
     private Set<Role> roles;
 
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.toString())).toList();
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).toList();
     }
 
     @Override public String getPassword() { return password; }

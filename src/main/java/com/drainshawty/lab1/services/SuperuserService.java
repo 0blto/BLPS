@@ -28,8 +28,10 @@ public class SuperuserService {
     }
 
     @Transactional
-    public Optional<User> hire(String email) {
+    public Optional<User> hire(String email) throws Exception {
         User user = repo.getByEmail(email);
+        if (user.getRoles().contains(User.Role.WORKER))
+            throw new Exception("User already hired!");
         user.getRoles().add(User.Role.WORKER);
         repo.save(user);
         return Optional.of(user);

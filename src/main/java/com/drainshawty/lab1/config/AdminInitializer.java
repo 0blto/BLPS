@@ -40,7 +40,7 @@ public class AdminInitializer {
                         .email(ADMIN_EMAIL)
                         .name(ADMIN_NAME)
                         .roles(Set.of(User.Role.ADMIN, User.Role.USER, User.Role.WORKER))
-                        .password(ADMIN_PASSWORD)
+                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .build();
                 userRepository.save(admin);
             }
