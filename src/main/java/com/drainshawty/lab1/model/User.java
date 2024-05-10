@@ -1,8 +1,8 @@
 package com.drainshawty.lab1.model;
 
+import com.drainshawty.lab1.serializers.UserSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -12,9 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -27,6 +25,7 @@ import java.util.Set;
         name="usr",
         uniqueConstraints = {@UniqueConstraint(columnNames = "email")}
 )
+@JsonSerialize(using = UserSerializer.class)
 public class User implements Serializable, UserDetails {
     public enum Role {
         USER,

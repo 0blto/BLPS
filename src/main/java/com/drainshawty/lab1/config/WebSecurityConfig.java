@@ -1,6 +1,7 @@
 package com.drainshawty.lab1.config;
 
 
+import com.drainshawty.lab1.exceptions.NotFoundException;
 import com.drainshawty.lab1.filters.JWTFilter;
 import com.drainshawty.lab1.model.User;
 import com.drainshawty.lab1.security.JWTUtil;
@@ -27,6 +28,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @Configuration
@@ -65,7 +69,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/user/**").permitAll();
                     auth.requestMatchers("/admin/**").hasAuthority(User.Role.ADMIN.name());
-                    auth.requestMatchers("/product/**").hasAuthority(User.Role.WORKER.name());
+                    auth.requestMatchers("/product/**").permitAll();
+                    auth.requestMatchers("/product/add").hasAuthority(User.Role.WORKER.name());
                     auth.requestMatchers("/cart/**").authenticated();
                 })
                 .sessionManagement(session -> {session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);})

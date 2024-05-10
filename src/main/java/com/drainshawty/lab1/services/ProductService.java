@@ -42,7 +42,7 @@ public class ProductService {
 
     public Optional<Product> get(String name) { return Optional.ofNullable(repo.getByName(name)); }
 
-    public Optional<List<Product>> like(String name) { return Optional.ofNullable(repo.getByNameContaining(name)); }
+    public Optional<List<Product>> like(String name) { return Optional.ofNullable(repo.getByNameContainingIgnoreCase(name)); }
 
     public List<Product> getAll() { return StreamSupport.stream(repo.findAll().spliterator(), false).collect(Collectors.toList()); }
 

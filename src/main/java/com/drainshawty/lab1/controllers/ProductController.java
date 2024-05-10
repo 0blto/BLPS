@@ -12,8 +12,6 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -48,8 +46,23 @@ public class ProductController {
                         HttpStatus.BAD_REQUEST));
     }
 
+    @GetMapping(path = "/search/{productName}", produces = "application/json")
+    public ResponseEntity<ProductResp> searchProduct(@PathVariable String productName) {
+        return service.get(productName)
+                .map(p -> new ResponseEntity<>(
+                        ProductResp.builder().msg("Exactly").products(Collections.singletonList(p)).build(),
+                        HttpStatus.OK)
+                ).orElse(service.like(productName).map(ps -> new ResponseEntity<>(
+                                ProductResp.builder().msg("Sounds like you are looking for").products(ps).build(),
+                                HttpStatus.OK)
+                        ).orElse(new ResponseEntity<>(
+                        ProductResp.builder().msg("Product with this name didn't exist").build(),
+                        HttpStatus.BAD_REQUEST))
+                );
+    }
+
     @PutMapping(path = "add", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<ProductResp> register(@Valid @RequestBody ProductReq req) {
+    public ResponseEntity<ProductResp> addProduct(@Valid @RequestBody ProductReq req) {
         return service.get(req.getName())
                 .map(u -> new ResponseEntity<>(
                         ProductResp.builder().msg("Product already exist").build(),

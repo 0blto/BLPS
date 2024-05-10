@@ -12,7 +12,7 @@ public interface ProductRepo extends CrudRepository<Product, Long> {
 
     boolean existsByName(String name);
 
-    List<Product> getByNameContaining(String substring);
+    List<Product> getByNameContainingIgnoreCase(String substring);
 
     Product getByName(String name);
 }
