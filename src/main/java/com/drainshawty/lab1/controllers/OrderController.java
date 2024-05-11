@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 @RestController
 @RequestMapping(path = "/order")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,11 +37,29 @@ public class OrderController {
                 .orElse(new ResponseEntity<>(OrderResp.builder().msg("Payment denied").build(), HttpStatus.CONFLICT));
     }
 
-    @PostMapping(path = "/work", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/work/relocate", consumes = "application/json", produces = "application/json")
     public ResponseEntity<OrderResp> changeStatus(@Valid @RequestBody OrderReq req) {
-        return service.changeStatus(req.getId(), req.getStatus())
+        return service.changeStatus(req.getId())
                 .map(os -> new ResponseEntity<>(OrderResp.builder().order(os).msg("Success!").build(), HttpStatus.OK))
                 .orElse(new ResponseEntity<>(OrderResp.builder().msg("Something went wrong.").build(), HttpStatus.CONFLICT));
+    }
+
+    @PostMapping(path = "/work/receive", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<OrderResp> receiveOrder(@Valid @RequestBody OrderReq req) throws Exception {
+        return service.orderReceive(req.getId(), req.getProductId())
+                .map(o -> new ResponseEntity<>(OrderResp.builder().order(
+                        Collections.singletonList(o)
+                ).msg("Success!").build(), HttpStatus.OK))
+                .orElse(new ResponseEntity<>(OrderResp.builder().msg("Order must have status arrived").build(), HttpStatus.CONFLICT));
+    }
+
+    @PostMapping(path = "/work/return", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<OrderResp> returnOrder(@Valid @RequestBody OrderReq req) throws Exception {
+        return service.orderReturn(req.getId(), req.getProductId())
+                .map(o -> new ResponseEntity<>(OrderResp.builder().order(
+                        Collections.singletonList(o)
+                ).msg("Success!").build(), HttpStatus.OK))
+                .orElse(new ResponseEntity<>(OrderResp.builder().msg("Order must have status arrived or received").build(), HttpStatus.CONFLICT));
     }
 
     @ExceptionHandler(Exception.class)

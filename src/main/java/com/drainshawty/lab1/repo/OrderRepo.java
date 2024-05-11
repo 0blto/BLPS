@@ -11,4 +11,6 @@ public interface OrderRepo extends CrudRepository<Order, OrderPK> {
     List<Order> getByCustomer(User customer);
 
     List<Order> getByOrderPK_OrderId(Long id);
+
+    Order getByOrderPK_OrderIdAndOrderPK_ProductId(Long orderId, Long productId);
 }

@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderReq {
     Long id;
-    Order.Status status;
+    Long productId;
 }

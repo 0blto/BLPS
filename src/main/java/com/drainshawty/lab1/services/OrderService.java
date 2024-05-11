@@ -5,6 +5,7 @@ import com.drainshawty.lab1.exceptions.NotFoundException;
 import com.drainshawty.lab1.http.responces.PaymentResp;
 import com.drainshawty.lab1.model.Order;
 import com.drainshawty.lab1.model.OrderPK;
+import com.drainshawty.lab1.model.Product;
 import com.drainshawty.lab1.repo.CartRepo;
 import com.drainshawty.lab1.repo.OrderRepo;
 import com.drainshawty.lab1.util.SequenceGenerator;
@@ -33,8 +34,17 @@ import java.util.Optional;
 public class OrderService {
 
     private Order.Status getNextStatus(Order.Status status) {
-        System.out.println(status);
-        return status;
+        switch (status) {
+            case CREATED -> {
+                return Order.Status.SHIPPING;
+            }
+            case SHIPPING -> {
+                return Order.Status.ARRIVED;
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     @NonFinal
@@ -57,11 +67,37 @@ public class OrderService {
     }
 
     @Transactional
-    public Optional<List<Order>> changeStatus(Long id, Order.Status status) {
+    public Optional<List<Order>> changeStatus(Long id) {
         return Optional.of(orderRepo.getByOrderPK_OrderId(id).stream().peek(o -> {
-            o.setStatus(status);
+            if (getNextStatus(o.getStatus()) == null) return;
+            o.setStatus(getNextStatus(o.getStatus()));
             save(o);
         }).toList());
+    }
+
+    @Transactional
+    public Optional<Order> orderReceive(Long orderId, Long productId) throws Exception {
+        Order order = orderRepo.getByOrderPK_OrderIdAndOrderPK_ProductId(orderId, productId);
+        if (order.getStatus().equals(Order.Status.ARRIVED)) {
+            order.setStatus(Order.Status.RECEIVED);
+            save(order);
+            return Optional.of(order);
+        }
+        return Optional.empty();
+    }
+
+    @Transactional
+    public Optional<Order> orderReturn(Long orderId, Long productId) throws Exception {
+        Order order = orderRepo.getByOrderPK_OrderIdAndOrderPK_ProductId(orderId, productId);
+        if (List.of(Order.Status.RECEIVED, Order.Status.ARRIVED).contains(order.getStatus())) {
+            order.setStatus(Order.Status.RETURNED);
+            Product product = order.getProduct();
+            product.setNumber(product.getNumber() + order.getQuantity());
+            productService.save(product);
+            save(order);
+            return Optional.of(order);
+        }
+        return Optional.empty();
     }
 
     @Transactional
