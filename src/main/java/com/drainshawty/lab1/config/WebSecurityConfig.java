@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/product/**").permitAll();
                     auth.requestMatchers("/product/add").hasAuthority(User.Role.WORKER.name());
                     auth.requestMatchers("/cart/**").authenticated();
+                    auth.requestMatchers("/order/**").authenticated();
                 })
                 .sessionManagement(session -> {session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);})
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)

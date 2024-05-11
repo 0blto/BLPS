@@ -3,13 +3,11 @@ package com.drainshawty.lab1.controllers;
 
 import com.drainshawty.lab1.http.requests.UserReq;
 import com.drainshawty.lab1.http.responces.UserResp;
-import com.drainshawty.lab1.model.User;
 import com.drainshawty.lab1.security.JWTUtil;
 import com.drainshawty.lab1.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-
-import javax.naming.AuthenticationException;
 import java.util.Collections;
 import java.util.Optional;
 
