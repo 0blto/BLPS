@@ -55,7 +55,7 @@ public class UserService {
     @Transactional
     public boolean restorePassword(String email) {
         try {
-            mailer.send(email, "Your password", this.get(email).get().getPassword());
+            mailer.send(email, "Your password", "There could be request to restore password");
             return true;
         } catch (MailSendException e) {
             System.out.println("[ERROR] " + e.getLocalizedMessage());

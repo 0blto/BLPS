@@ -120,4 +120,10 @@ public class UserController {
                         HttpStatus.UNAUTHORIZED));
     }
 
+    @PostMapping(path = "restore", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserResp> restore(@Valid @RequestBody UserReq req) {
+        return (service.exist(req.email) && service.restorePassword(req.email)) ?
+                new ResponseEntity<>(UserResp.builder().msg("Restore email was send").build(), HttpStatus.OK) :
+                new ResponseEntity<>(UserResp.builder().msg("Internal error, try later").build(), HttpStatus.BAD_REQUEST);
+    }
 }
