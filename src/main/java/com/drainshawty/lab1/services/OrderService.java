@@ -31,6 +31,12 @@ import java.util.Optional;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderService {
+
+    private Order.Status getNextStatus(Order.Status status) {
+        System.out.println(status);
+        return status;
+    }
+
     @NonFinal
     @Value("${payment.api}")
     String API;
@@ -51,6 +57,14 @@ public class OrderService {
     }
 
     @Transactional
+    public Optional<List<Order>> changeStatus(Long id, Order.Status status) {
+        return Optional.of(orderRepo.getByOrderPK_OrderId(id).stream().peek(o -> {
+            o.setStatus(status);
+            save(o);
+        }).toList());
+    }
+
+    @Transactional
     public Optional<List<Order>> createOrder(String email) {
         Long currentId = SequenceGenerator.getNext();
         return Optional.ofNullable(userService.get(email)
@@ -68,18 +82,10 @@ public class OrderService {
                                                                     )
                                                             )
                                                             .customer(u).product(c.getProduct())
-                                                            .quantity(c.getQuantity()).build()
+                                                            .quantity(c.getQuantity())
+                                                            .status(Order.Status.CREATED).build()
                                             ).forEach(this::save);
                                     cartService.clearCart(email);
-                                    /*
-                                    HttpHeaders headers = new HttpHeaders();
-                                    headers.setContentType(MediaType.APPLICATION_JSON);
-                                    ResponseEntity<PaymentResp> resp = restTemplate.postForEntity(API, new HttpEntity<>("", headers), PaymentResp.class);
-                                    if (resp.getStatusCode().is2xxSuccessful())
-                                        if (Objects.requireNonNull(resp.getBody()).isStatus())
-                                            return orderRepo.getByOrderPK_OrderId(currentId);
-
-                                     */
                                     orderRepo.getByOrderPK_OrderId(currentId).forEach(o ->
                                         productService.get(o.getProduct().getId())
                                                 .ifPresent(p -> {

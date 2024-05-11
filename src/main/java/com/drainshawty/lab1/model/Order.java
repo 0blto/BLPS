@@ -1,6 +1,7 @@
 package com.drainshawty.lab1.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +16,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
+    public enum Status {
+        CREATED,
+        SHIPPING,
+        ARRIVED,
+
+        RECEIVED,
+
+        RETURNED
+
+    }
+
     @EmbeddedId
     OrderPK orderPK;
 
@@ -28,4 +40,9 @@ public class Order {
 
     @Positive
     Long quantity;
+
+    @NotNull
+    Status status;
+
+
 }
