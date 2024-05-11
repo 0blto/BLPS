@@ -60,20 +60,4 @@ public class ProductController {
                         HttpStatus.BAD_REQUEST))
                 );
     }
-
-    @PutMapping(path = "add", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<ProductResp> addProduct(@Valid @RequestBody ProductReq req) {
-        return service.get(req.getName())
-                .map(u -> new ResponseEntity<>(
-                        ProductResp.builder().msg("Product already exist").build(),
-                        HttpStatus.CONFLICT)
-                ).orElseGet(() -> {
-                    val p = service.add(req.getName(), req.getDescription(), req.getNumber(), req.getPrice()).get();
-                    return new ResponseEntity<>(
-                            ProductResp.builder()
-                                    .products(Collections.singletonList(p)).msg(String.format("Product %s added", p.getName()))
-                                    .build(),
-                            HttpStatus.CREATED);
-                });
-    }
 }

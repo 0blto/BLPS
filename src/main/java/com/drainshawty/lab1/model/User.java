@@ -30,7 +30,7 @@ import java.util.Set;
 public class User implements Serializable, UserDetails {
     public enum Role {
         USER,
-        WORKER,
+        EDITOR,
         ADMIN
     }
 

@@ -18,6 +18,7 @@ import java.util.List;
 public class Order {
     public enum Status {
         CREATED,
+        PAID,
         SHIPPING,
         ARRIVED,
 

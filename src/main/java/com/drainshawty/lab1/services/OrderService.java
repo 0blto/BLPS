@@ -36,6 +36,9 @@ public class OrderService {
     private Order.Status getNextStatus(Order.Status status) {
         switch (status) {
             case CREATED -> {
+                return Order.Status.PAID;
+            }
+            case PAID -> {
                 return Order.Status.SHIPPING;
             }
             case SHIPPING -> {
@@ -46,10 +49,6 @@ public class OrderService {
             }
         }
     }
-
-    @NonFinal
-    @Value("${payment.api}")
-    String API;
 
     ProductService productService;
     UserService userService;

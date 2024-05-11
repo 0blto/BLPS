@@ -70,10 +70,9 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/user/**").permitAll();
                     auth.requestMatchers("/admin/**").hasAuthority(User.Role.ADMIN.name());
                     auth.requestMatchers("/product/**").permitAll();
-                    auth.requestMatchers("/product/add").hasAuthority(User.Role.WORKER.name());
+                    auth.requestMatchers("/secured/**").hasAuthority(User.Role.EDITOR.name());
                     auth.requestMatchers("/cart/**").authenticated();
                     auth.requestMatchers("/order/**").authenticated();
-                    auth.requestMatchers("/order/work").hasAuthority(User.Role.WORKER.name());
                 })
                 .sessionManagement(session -> {session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);})
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
