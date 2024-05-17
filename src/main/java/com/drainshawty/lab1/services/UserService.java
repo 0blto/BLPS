@@ -1,6 +1,8 @@
 package com.drainshawty.lab1.services;
 
+import com.drainshawty.lab1.model.Role;
 import com.drainshawty.lab1.model.User;
+import com.drainshawty.lab1.repo.RoleRepo;
 import com.drainshawty.lab1.repo.UserRepo;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,19 +26,21 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
     UserRepo repo;
+    RoleRepo roleRepo;
     BCryptPasswordEncoder encoder;
     EmailService mailer;
 
     @Autowired
-    public UserService(UserRepo repo, BCryptPasswordEncoder encoder, EmailService mailer) {
+    public UserService(UserRepo repo, BCryptPasswordEncoder encoder, EmailService mailer, RoleRepo roleRepo) {
         this.repo = repo;
         this.encoder = encoder;
         this.mailer = mailer;
+        this.roleRepo = roleRepo;
     }
 
     @Transactional
     public Optional<User> add(String email, String password, String name) {
-        val u = User.builder().email(email).name(name).roles(Set.of(User.Role.USER)).password(encoder.encode(password)).build();
+        val u = User.builder().email(email).name(name).roles(Set.of(roleRepo.getByName("ROLE_USER"))).password(encoder.encode(password)).build();
         this.save(u);
         try {
             mailer.send(email, "Register", "yeah!");

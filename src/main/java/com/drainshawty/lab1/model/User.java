@@ -17,7 +17,8 @@ import java.util.Collection;
 import java.util.Set;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,16 +28,10 @@ import java.util.Set;
         uniqueConstraints = {@UniqueConstraint(columnNames = "email")}
 )
 @JsonSerialize(using = UserSerializer.class)
-public class User implements Serializable, UserDetails {
-    public enum Role {
-        USER,
-        EDITOR,
-        ADMIN
-    }
-
+public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    long userId;
+    Long userId;
 
     @Email
     @NotNull
@@ -54,28 +49,14 @@ public class User implements Serializable, UserDetails {
     @OneToMany(mappedBy = "customer")
     Set<Order> order;
 
-
-
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    Set<Role> roles;
-
-    @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).toList();
-    }
-
-    @Override public String getPassword() { return password; }
-
-    @Override public String getUsername() { return email; }
-
-    @Override public boolean isAccountNonExpired() { return true; }
-
-    @Override public boolean isAccountNonLocked() { return true; }
-
-    @Override public boolean isCredentialsNonExpired() { return true; }
-
-    @Override public boolean isEnabled() { return true; }
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    Collection<Role> roles;
 }
 
 

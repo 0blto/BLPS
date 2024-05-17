@@ -1,6 +1,8 @@
 package com.drainshawty.lab1.services;
 
+import com.drainshawty.lab1.model.Role;
 import com.drainshawty.lab1.model.User;
+import com.drainshawty.lab1.repo.RoleRepo;
 import com.drainshawty.lab1.repo.UserRepo;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,7 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Data
@@ -19,20 +23,23 @@ public class SuperuserService {
     UserRepo repo;
     BCryptPasswordEncoder encoder;
     EmailService mailer;
+    RoleRepo roleRepo;
 
     @Autowired
-    public SuperuserService(UserRepo repo, BCryptPasswordEncoder encoder, EmailService mailer) {
+    public SuperuserService(UserRepo repo, BCryptPasswordEncoder encoder, RoleRepo roleRepo, EmailService mailer) {
         this.repo = repo;
         this.encoder = encoder;
         this.mailer = mailer;
+        this.roleRepo = roleRepo;
     }
 
     @Transactional
     public Optional<User> hire(String email) throws Exception {
         User user = repo.getByEmail(email);
-        if (user.getRoles().contains(User.Role.EDITOR))
+        if (user.getRoles().contains(roleRepo.getByName("ROLE_STAFF"))
+                || user.getRoles().contains(roleRepo.getByName("ROLE_ADMIN")))
             throw new Exception("User already hired!");
-        user.getRoles().add(User.Role.EDITOR);
+        user.setRoles(Collections.singletonList(new Role("ROLE_STAFF")));
         repo.save(user);
         return Optional.of(user);
     }
