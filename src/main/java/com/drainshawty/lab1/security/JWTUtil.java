@@ -68,6 +68,4 @@ import java.util.function.Function;
     }
 
     public String decode(HttpServletRequest req) { return this.getUsername(this.resolveToken(req)); }
-
-    public String decodeId(HttpServletRequest req) { return this.getUsername(this.resolveToken(req)); }
 }

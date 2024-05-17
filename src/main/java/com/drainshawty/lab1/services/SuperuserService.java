@@ -39,7 +39,7 @@ public class SuperuserService {
         if (user.getRoles().contains(roleRepo.getByName("ROLE_STAFF"))
                 || user.getRoles().contains(roleRepo.getByName("ROLE_ADMIN")))
             throw new Exception("User already hired!");
-        user.setRoles(Collections.singletonList(new Role("ROLE_STAFF")));
+        user.getRoles().add(roleRepo.getByName("ROLE_STAFF"));
         repo.save(user);
         return Optional.of(user);
     }

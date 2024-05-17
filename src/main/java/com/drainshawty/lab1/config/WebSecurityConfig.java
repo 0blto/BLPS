@@ -90,7 +90,7 @@ public class WebSecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/user/**").permitAll();
-                    auth.requestMatchers("/admin/**").permitAll();
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/product/**").permitAll();
                     auth.requestMatchers("/secured/**").hasRole("STAFF");
                     auth.requestMatchers("/cart/**").authenticated();
