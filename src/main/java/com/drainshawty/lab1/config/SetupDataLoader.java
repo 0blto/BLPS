@@ -1,11 +1,11 @@
 package com.drainshawty.lab1.config;
 
-import com.drainshawty.lab1.model.Privilege;
-import com.drainshawty.lab1.model.Role;
-import com.drainshawty.lab1.model.User;
-import com.drainshawty.lab1.repo.PrivilegeRepo;
-import com.drainshawty.lab1.repo.RoleRepo;
-import com.drainshawty.lab1.repo.UserRepo;
+import com.drainshawty.lab1.model.userdb.Privilege;
+import com.drainshawty.lab1.model.userdb.Role;
+import com.drainshawty.lab1.model.userdb.User;
+import com.drainshawty.lab1.repo.userdb.PrivilegeRepo;
+import com.drainshawty.lab1.repo.userdb.RoleRepo;
+import com.drainshawty.lab1.repo.userdb.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 

@@ -1,6 +1,6 @@
 package com.drainshawty.lab1.http.responces;
 
-import com.drainshawty.lab1.model.User;
+import com.drainshawty.lab1.model.userdb.User;
 import lombok.Builder;
 import lombok.Data;
 

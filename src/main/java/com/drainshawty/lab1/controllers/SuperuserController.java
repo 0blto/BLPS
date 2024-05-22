@@ -2,16 +2,13 @@ package com.drainshawty.lab1.controllers;
 
 import com.drainshawty.lab1.http.requests.UserReq;
 import com.drainshawty.lab1.http.responces.UserResp;
-import com.drainshawty.lab1.model.User;
 import com.drainshawty.lab1.security.JWTUtil;
 import com.drainshawty.lab1.services.SuperuserService;
 import com.drainshawty.lab1.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

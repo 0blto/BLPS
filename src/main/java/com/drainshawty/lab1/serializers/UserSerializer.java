@@ -1,7 +1,6 @@
 package com.drainshawty.lab1.serializers;
 
-import com.drainshawty.lab1.model.Product;
-import com.drainshawty.lab1.model.User;
+import com.drainshawty.lab1.model.userdb.User;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

@@ -1,21 +1,18 @@
 package com.drainshawty.lab1.services;
 
 
-import com.drainshawty.lab1.model.Product;
-import com.drainshawty.lab1.model.User;
-import com.drainshawty.lab1.repo.ProductRepo;
+import com.drainshawty.lab1.model.shoppingdb.Product;
+import com.drainshawty.lab1.repo.shoppingdb.ProductRepo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -38,14 +35,19 @@ public class ProductService {
         return this.get(name);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Product> get(long id) { return Optional.ofNullable(repo.getById(id)); }
 
+    @Transactional
     public Optional<Product> get(String name) { return Optional.ofNullable(repo.getByName(name)); }
 
+    @Transactional
     public Optional<List<Product>> like(String name) { return Optional.ofNullable(repo.getByNameContainingIgnoreCase(name)); }
 
+    @Transactional
     public List<Product> getAll() { return StreamSupport.stream(repo.findAll().spliterator(), false).collect(Collectors.toList()); }
 
+    @Transactional
     public boolean exist(String name) { return repo.existsByName(name); }
 
     @Transactional

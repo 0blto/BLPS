@@ -2,30 +2,20 @@ package com.drainshawty.lab1.services;
 
 
 import com.drainshawty.lab1.exceptions.NotFoundException;
-import com.drainshawty.lab1.http.responces.PaymentResp;
-import com.drainshawty.lab1.model.Order;
-import com.drainshawty.lab1.model.OrderPK;
-import com.drainshawty.lab1.model.Product;
-import com.drainshawty.lab1.repo.CartRepo;
-import com.drainshawty.lab1.repo.OrderRepo;
+import com.drainshawty.lab1.model.shoppingdb.Order;
+import com.drainshawty.lab1.model.shoppingdb.OrderPK;
+import com.drainshawty.lab1.model.shoppingdb.Product;
+import com.drainshawty.lab1.repo.shoppingdb.OrderRepo;
 import com.drainshawty.lab1.util.SequenceGenerator;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -133,5 +123,6 @@ public class OrderService {
                 ).orElseThrow(() -> new NotFoundException("Unable to create order")));
     }
 
+    @Transactional
     public void save(Order order) {orderRepo.save(order);}
 }

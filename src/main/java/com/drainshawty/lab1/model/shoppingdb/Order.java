@@ -1,12 +1,12 @@
-package com.drainshawty.lab1.model;
+package com.drainshawty.lab1.model.shoppingdb;
 
+import com.drainshawty.lab1.model.userdb.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Table(name = "orders")
@@ -31,8 +31,7 @@ public class Order {
     @EmbeddedId
     OrderPK orderPK;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    @Transient
     User customer;
 
     @ManyToOne(fetch = FetchType.EAGER)

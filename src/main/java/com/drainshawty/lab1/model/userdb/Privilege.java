@@ -1,5 +1,6 @@
-package com.drainshawty.lab1.model;
+package com.drainshawty.lab1.model.userdb;
 
+import com.drainshawty.lab1.model.userdb.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +13,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table
 public class Privilege {
 
     @Id

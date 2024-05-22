@@ -1,10 +1,9 @@
 package com.drainshawty.lab1.services;
 
-import com.drainshawty.lab1.model.Privilege;
-import com.drainshawty.lab1.model.Role;
-import com.drainshawty.lab1.model.User;
-import com.drainshawty.lab1.repo.RoleRepo;
-import com.drainshawty.lab1.repo.UserRepo;
+import com.drainshawty.lab1.model.userdb.Privilege;
+import com.drainshawty.lab1.model.userdb.Role;
+import com.drainshawty.lab1.model.userdb.User;
+import com.drainshawty.lab1.repo.userdb.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

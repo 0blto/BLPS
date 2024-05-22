@@ -1,4 +1,4 @@
-package com.drainshawty.lab1.model;
+package com.drainshawty.lab1.model.userdb;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +10,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @Entity
+@Table
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

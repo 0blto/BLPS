@@ -1,7 +1,6 @@
 package com.drainshawty.lab1.http.responces;
 
-import com.drainshawty.lab1.model.Cart;
-import com.drainshawty.lab1.model.Order;
+import com.drainshawty.lab1.model.shoppingdb.Order;
 import lombok.Builder;
 import lombok.Data;
 

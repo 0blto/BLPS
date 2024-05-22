@@ -1,14 +1,12 @@
 package com.drainshawty.lab1.http.responces;
 
-import com.drainshawty.lab1.model.Cart;
-import com.drainshawty.lab1.model.Product;
+import com.drainshawty.lab1.model.shoppingdb.Cart;
 import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder

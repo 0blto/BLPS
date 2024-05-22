@@ -1,9 +1,8 @@
 package com.drainshawty.lab1.services;
 
-import com.drainshawty.lab1.model.Role;
-import com.drainshawty.lab1.model.User;
-import com.drainshawty.lab1.repo.RoleRepo;
-import com.drainshawty.lab1.repo.UserRepo;
+import com.drainshawty.lab1.model.userdb.User;
+import com.drainshawty.lab1.repo.userdb.RoleRepo;
+import com.drainshawty.lab1.repo.userdb.UserRepo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -12,9 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Data

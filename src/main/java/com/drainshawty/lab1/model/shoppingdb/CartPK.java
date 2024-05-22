@@ -1,4 +1,4 @@
-package com.drainshawty.lab1.model;
+package com.drainshawty.lab1.model.shoppingdb;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

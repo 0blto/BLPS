@@ -1,8 +1,8 @@
-package com.drainshawty.lab1.model;
+package com.drainshawty.lab1.model.shoppingdb;
 
+import com.drainshawty.lab1.model.userdb.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,8 +17,7 @@ public class Cart {
     @EmbeddedId
     CartPK cartPK;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    @Transient
     User customer;
 
     @ManyToOne(fetch = FetchType.EAGER)

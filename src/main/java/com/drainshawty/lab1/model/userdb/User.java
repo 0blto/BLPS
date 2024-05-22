@@ -1,5 +1,7 @@
-package com.drainshawty.lab1.model;
+package com.drainshawty.lab1.model.userdb;
 
+import com.drainshawty.lab1.model.shoppingdb.Cart;
+import com.drainshawty.lab1.model.shoppingdb.Order;
 import com.drainshawty.lab1.serializers.UserSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
@@ -7,10 +9,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.aspectj.weaver.ast.Or;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -42,12 +40,6 @@ public class User implements Serializable {
 
     @NotNull
     String name;
-
-    @OneToMany(mappedBy = "customer")
-    Set<Cart> cart;
-
-    @OneToMany(mappedBy = "customer")
-    Set<Order> order;
 
     @ManyToMany
     @JoinTable(
