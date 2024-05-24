@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,6 +29,7 @@ public class CartController {
         this.jwtUtil = jwtUtil;
     }
 
+    @PreAuthorize("hasAuthority('CART_PRIVILEGE')")
     @GetMapping(produces = "application/json")
     public ResponseEntity<CartResp> getCart(HttpServletRequest rawReq) {
         return service.getUserCart(jwtUtil.decode(rawReq))
@@ -40,6 +42,7 @@ public class CartController {
                 ));
     }
 
+    @PreAuthorize("hasAuthority('CART_PRIVILEGE')")
     @PutMapping(path = "add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CartResp> add(@Valid @RequestBody CartReq req, HttpServletRequest rawReq) {
         return service.addProduct(jwtUtil.decode(rawReq), req.getIdentifier())
@@ -52,6 +55,7 @@ public class CartController {
         ));
     }
 
+    @PreAuthorize("hasAuthority('CART_PRIVILEGE')")
     @DeleteMapping(path = "remove", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CartResp> remove(@Valid @RequestBody CartReq req, HttpServletRequest rawReq) {
         return service.removeOne(jwtUtil.decode(rawReq), req.getIdentifier())
@@ -64,6 +68,7 @@ public class CartController {
                 ));
     }
 
+    @PreAuthorize("hasAuthority('CART_PRIVILEGE')")
     @DeleteMapping(path = "clear", produces = "application/json")
     public ResponseEntity<CartResp> clearCart(HttpServletRequest rawReq) {
         return service.clearCart(jwtUtil.decode(rawReq))

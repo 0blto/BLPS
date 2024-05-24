@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,7 @@ public class SuperuserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAuthority('HIRE_PRIVILEGE')")
     @PatchMapping(path = "hire", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResp> hire(@Valid @RequestBody UserReq req) {
 

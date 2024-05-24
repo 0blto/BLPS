@@ -31,9 +31,6 @@ public class Order {
     @EmbeddedId
     OrderPK orderPK;
 
-    @Transient
-    User customer;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     Product product;

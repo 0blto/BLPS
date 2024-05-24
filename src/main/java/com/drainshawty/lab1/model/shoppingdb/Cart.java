@@ -17,9 +17,6 @@ public class Cart {
     @EmbeddedId
     CartPK cartPK;
 
-    @Transient
-    User customer;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     Product product;

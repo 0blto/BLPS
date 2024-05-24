@@ -29,7 +29,7 @@ public class CartService {
         this.cartRepo = cartRepo;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "shoppingTransactionManager")
     public Optional<List<Cart>> getUserCart(String email) {
         return Optional.ofNullable(userService.get(email)
                 .map(u -> cartRepo.getByCartPK_CustomerId(u.getUserId()))
@@ -37,7 +37,7 @@ public class CartService {
         );
     }
 
-    @Transactional
+    @Transactional(transactionManager = "shoppingTransactionManager")
     public Optional<List<Cart>> addProduct(String email, Long productId) {
         return productService.get(productId).map(p ->
             userService.get(email).map(u -> {
@@ -64,7 +64,7 @@ public class CartService {
         ).orElseThrow(() -> new NotFoundException("Product with id " + productId + " not found"));
     }
 
-    @Transactional
+    @Transactional(transactionManager = "shoppingTransactionManager")
     public Optional<List<Cart>> removeOne(String email, Long productId) {
         return productService.get(productId).map(p ->
                 userService.get(email).map(u ->
@@ -82,7 +82,7 @@ public class CartService {
         ).orElseThrow(() -> new NotFoundException("Product with id " + productId + " not found"));
     }
 
-    @Transactional
+    @Transactional(transactionManager = "shoppingTransactionManager")
     public Optional<List<Cart>> clearCart(String email) {
         return Optional.ofNullable(userService.get(email)
                 .map(u -> {

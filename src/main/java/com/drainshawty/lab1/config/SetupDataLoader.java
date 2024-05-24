@@ -74,11 +74,13 @@ public class SetupDataLoader implements
         createRoleIfNotFound("ROLE_STAFF", Arrays.asList(orderManagementPrivilege, productsManagementPrivilege));
         createRoleIfNotFound("ROLE_USER", Arrays.asList(viewPrivilege, orderPrivilege, cartPrivilege));
         Role adminRole = roleRepository.getByName("ROLE_ADMIN");
+        Role staffRole = roleRepository.getByName("ROLE_STAFF");
+        Role userRole = roleRepository.getByName("ROLE_USER");
         User user = User.builder()
                 .email(ADMIN_EMAIL)
                 .name(ADMIN_NAME)
                 .password(passwordEncoder.encode(ADMIN_PASSWORD))
-                .roles(Collections.singletonList(adminRole))
+                .roles(Set.of(adminRole, staffRole, userRole))
                 .build();
         userRepository.save(user);
         alreadySetup = true;

@@ -13,6 +13,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +85,7 @@ public class UserController {
                 });
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PatchMapping(path = "modify", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResp> modify(@Valid @RequestBody UserReq req, HttpServletRequest rawReq) {
         return (service.get(jwtUtil.decode(rawReq)))
@@ -105,6 +107,7 @@ public class UserController {
                         HttpStatus.UNAUTHORIZED));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping(path = "delete", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResp> delete(@Valid @RequestBody UserReq req, HttpServletRequest rawReq) {
         return (service.get(jwtUtil.decode(rawReq)))
@@ -120,6 +123,7 @@ public class UserController {
                         HttpStatus.UNAUTHORIZED));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping(path = "restore", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResp> restore(@Valid @RequestBody UserReq req) {
         return (service.exist(req.email) && service.restorePassword(req.email)) ?

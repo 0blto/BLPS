@@ -10,6 +10,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -26,6 +27,7 @@ public class ProductWorkerController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAuthority('PRODUCTS_MANAGEMENT_PRIVILEGE')")
     @PutMapping(path = "add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ProductResp> addProduct(@Valid @RequestBody ProductReq req) {
         return service.get(req.getName())

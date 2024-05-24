@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -27,6 +28,7 @@ public class OrderWorkerController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAuthority('ORDER_MANAGEMENT_PRIVILEGE')")
     @PostMapping(path = "relocate", consumes = "application/json", produces = "application/json")
     public ResponseEntity<OrderResp> changeStatus(@Valid @RequestBody OrderReq req) {
         return service.changeStatus(req.getId())
@@ -34,6 +36,7 @@ public class OrderWorkerController {
                 .orElse(new ResponseEntity<>(OrderResp.builder().msg("Something went wrong.").build(), HttpStatus.CONFLICT));
     }
 
+    @PreAuthorize("hasAuthority('ORDER_MANAGEMENT_PRIVILEGE')")
     @PostMapping(path = "receive", consumes = "application/json", produces = "application/json")
     public ResponseEntity<OrderResp> receiveOrder(@Valid @RequestBody OrderReq req) throws Exception {
         return service.orderReceive(req.getId(), req.getProductId())
@@ -43,6 +46,7 @@ public class OrderWorkerController {
                 .orElse(new ResponseEntity<>(OrderResp.builder().msg("Order must have status arrived").build(), HttpStatus.CONFLICT));
     }
 
+    @PreAuthorize("hasAuthority('ORDER_MANAGEMENT_PRIVILEGE')")
     @PostMapping(path = "return", consumes = "application/json", produces = "application/json")
     public ResponseEntity<OrderResp> returnOrder(@Valid @RequestBody OrderReq req) throws Exception {
         return service.orderReturn(req.getId(), req.getProductId())
