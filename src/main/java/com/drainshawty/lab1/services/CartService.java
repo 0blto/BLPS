@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -29,7 +30,7 @@ public class CartService {
         this.cartRepo = cartRepo;
     }
 
-    @Transactional(transactionManager = "shoppingTransactionManager")
+    @Transactional
     public Optional<List<Cart>> getUserCart(String email) {
         return Optional.ofNullable(userService.get(email)
                 .map(u -> cartRepo.getByCartPK_CustomerId(u.getUserId()))
@@ -37,7 +38,7 @@ public class CartService {
         );
     }
 
-    @Transactional(transactionManager = "shoppingTransactionManager")
+    @Transactional
     public Optional<List<Cart>> addProduct(String email, Long productId) {
         return productService.get(productId).map(p ->
             userService.get(email).map(u -> {
@@ -64,7 +65,7 @@ public class CartService {
         ).orElseThrow(() -> new NotFoundException("Product with id " + productId + " not found"));
     }
 
-    @Transactional(transactionManager = "shoppingTransactionManager")
+    @Transactional
     public Optional<List<Cart>> removeOne(String email, Long productId) {
         return productService.get(productId).map(p ->
                 userService.get(email).map(u ->
@@ -82,7 +83,7 @@ public class CartService {
         ).orElseThrow(() -> new NotFoundException("Product with id " + productId + " not found"));
     }
 
-    @Transactional(transactionManager = "shoppingTransactionManager")
+    @Transactional
     public Optional<List<Cart>> clearCart(String email) {
         return Optional.ofNullable(userService.get(email)
                 .map(u -> {
