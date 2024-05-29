@@ -22,6 +22,7 @@ import java.util.*;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Configuration
+@DependsOn("userEntityManager")
 public class SetupDataLoader implements
         ApplicationListener<ContextRefreshedEvent> {
 

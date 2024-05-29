@@ -101,7 +101,7 @@ public class OrderService {
         throw new NotFoundException("Order not found");
     }
 
-    @Transactional(transactionManager = "shoppingTransactionManager")
+    @Transactional
     public Optional<List<Order>> createOrder(String email) {
         Long currentId = SequenceGenerator.getNext();
         return Optional.ofNullable(userService.get(email)

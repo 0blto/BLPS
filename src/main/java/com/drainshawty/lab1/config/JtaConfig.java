@@ -2,37 +2,65 @@ package com.drainshawty.lab1.config;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
-import com.atomikos.jdbc.AtomikosDataSourceBean;
-import jakarta.transaction.SystemException;
-import org.postgresql.xa.PGXADataSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import jakarta.transaction.TransactionManager;
+import jakarta.transaction.UserTransaction;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 
 @Configuration
+@ComponentScan
 @EnableTransactionManagement
 public class JtaConfig {
 
-    @Bean(initMethod = "init", destroyMethod = "close")
-    public UserTransactionManager userTransactionManager() throws SystemException {
-        UserTransactionManager userTransactionManager = new UserTransactionManager();
-        userTransactionManager.setTransactionTimeout(300);
-        userTransactionManager.setForceShutdown(true);
-        return userTransactionManager;
+    @Bean
+    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
     @Bean
-    public JtaTransactionManager transactionManager() throws SystemException {
-        JtaTransactionManager jtaTransactionManager = new JtaTransactionManager();
-        jtaTransactionManager.setTransactionManager(userTransactionManager());
-        jtaTransactionManager.setUserTransaction(userTransactionManager());
-        return jtaTransactionManager;
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setShowSql(true);
+        hibernateJpaVendorAdapter.setGenerateDdl(true);
+        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+        return hibernateJpaVendorAdapter;
+    }
 
+    @Bean(name = "userTransaction")
+    public UserTransaction userTransaction() throws Throwable {
+        UserTransactionImp userTransactionImp = new UserTransactionImp();
+        userTransactionImp.setTransactionTimeout(10000);
+        return userTransactionImp;
+    }
+
+    @Bean(name = "atomikosTransactionManager")
+    public TransactionManager atomikosTransactionManager() {
+        UserTransactionManager userTransactionManager = new UserTransactionManager();
+        userTransactionManager.setForceShutdown(false);
+
+        AtomikosJtaPlatform.transactionManager = userTransactionManager;
+
+        return userTransactionManager;
+    }
+
+    @Bean(name = "transactionManager")
+    @DependsOn({ "userTransaction", "atomikosTransactionManager" })
+    public PlatformTransactionManager transactionManager() throws Throwable {
+        UserTransaction userTransaction = userTransaction();
+
+        AtomikosJtaPlatform.transaction = userTransaction;
+
+        TransactionManager atomikosTransactionManager = atomikosTransactionManager();
+        return new JtaTransactionManager(userTransaction, atomikosTransactionManager);
     }
 }

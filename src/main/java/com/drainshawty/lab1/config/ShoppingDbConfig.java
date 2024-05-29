@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
+@DependsOn("transactionManager")
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.drainshawty.lab1.repo.shoppingdb",
@@ -41,7 +42,7 @@ public class ShoppingDbConfig {
 
 
     @Bean(name = "shoppingEntityManager")
-    public EntityManagerFactory shoppingEntityManager(
+    public LocalContainerEntityManagerFactoryBean shoppingEntityManager(
             @Qualifier("shoppingDataSource") DataSource dataSource) {
         return dataBuilder.buildEntityManager(dataSource,
                 "com.drainshawty.lab1.model.shoppingdb");

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
+@DependsOn("transactionManager")
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.drainshawty.lab1.repo.userdb",
@@ -37,7 +38,7 @@ public class UserDbConfig {
     }
 
     @Bean(name = "userEntityManager")
-    public EntityManagerFactory userEntityManager(
+    public LocalContainerEntityManagerFactoryBean userEntityManager(
             @Qualifier("userDataSource") DataSource dataSource) {
         return dataBuilder.buildEntityManager(dataSource,
                 "com.drainshawty.lab1.model.userdb");
