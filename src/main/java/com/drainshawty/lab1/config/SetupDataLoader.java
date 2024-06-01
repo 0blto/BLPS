@@ -72,6 +72,7 @@ public class SetupDataLoader implements
 
         Privilege hirePrivilege = createPrivilegeIfNotFound("HIRE_PRIVILEGE");
 
+        
         createRoleIfNotFound("ROLE_ADMIN", Collections.singletonList(hirePrivilege));
         createRoleIfNotFound("ROLE_STAFF", Arrays.asList(orderManagementPrivilege, productsManagementPrivilege));
         createRoleIfNotFound("ROLE_USER", Arrays.asList(viewPrivilege, orderPrivilege, cartPrivilege));
