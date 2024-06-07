@@ -8,6 +8,7 @@ import com.drainshawty.lab1.repo.shoppingdb.ProductRepo;
 import com.drainshawty.lab1.repo.userdb.UserRepo;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,13 @@ import java.util.*;
 
 @Service
 @Data
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CartService {
 
     ProductRepo productRepo;
     UserRepo userRepo;
     CartRepo cartRepo;
-    @Autowired
-    public CartService(ProductRepo productRepo, UserRepo userRepo, CartRepo cartRepo) {
-        this.userRepo = userRepo;
-        this.productRepo = productRepo;
-        this.cartRepo = cartRepo;
-    }
 
     @Transactional
     public Optional<List<Cart>> getUserCart(String email) {

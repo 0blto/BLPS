@@ -1,10 +1,12 @@
 package com.drainshawty.lab1.services;
 
+import com.drainshawty.lab1.model.EmailData;
 import com.drainshawty.lab1.model.userdb.User;
 import com.drainshawty.lab1.repo.userdb.RoleRepo;
 import com.drainshawty.lab1.repo.userdb.UserRepo;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,47 +25,48 @@ import java.util.stream.StreamSupport;
 @Service
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class UserService {
     UserRepo repo;
     RoleRepo roleRepo;
     BCryptPasswordEncoder encoder;
-    EmailService mailer;
-
-    @Autowired
-    public UserService(UserRepo repo, BCryptPasswordEncoder encoder, EmailService mailer, RoleRepo roleRepo) {
-        this.repo = repo;
-        this.encoder = encoder;
-        this.mailer = mailer;
-        this.roleRepo = roleRepo;
-    }
+    KafkaProducer kafkaProducer;
 
     @Transactional
     public Optional<User> add(String email, String password, String name) {
         val u = User.builder().email(email).name(name).roles(Set.of(roleRepo.getByName("ROLE_USER"))).password(encoder.encode(password)).build();
         this.save(u);
-        try {
-            mailer.send(email, "Register", "yeah!");
-        } catch (MailSendException e) { System.out.println("[ERROR] " + e.getLocalizedMessage()); }
+        kafkaProducer.sendMessage(
+                EmailData.builder()
+                        .receiver(email)
+                        .topic("Register")
+                        .message("Success!")
+                        .build()
+        );
         return this.get(email);
     }
 
     @Transactional
     public void delete(String email) {
         repo.delete(this.repo.getByEmail(email));
-        try {
-            mailer.send(email, "Goodbye", ":(");
-        } catch (MailSendException e) { System.out.println("[ERROR] " + e.getLocalizedMessage()); }
+        kafkaProducer.sendMessage(
+                EmailData.builder()
+                        .receiver(email)
+                        .topic("Bye bye")
+                        .message("(")
+                        .build()
+        );
     }
 
     @Transactional
-    public boolean restorePassword(String email) {
-        try {
-            mailer.send(email, "Your password", "There could be request to restore password");
-            return true;
-        } catch (MailSendException e) {
-            System.out.println("[ERROR] " + e.getLocalizedMessage());
-            return false;
-        }
+    public void restorePassword(String email) {
+        kafkaProducer.sendMessage(
+                EmailData.builder()
+                        .receiver(email)
+                        .topic("Restore password")
+                        .message("JOKE")
+                        .build()
+        );
     }
 
     public List<User> getAll() { return StreamSupport.stream(repo.findAll().spliterator(), false).collect(Collectors.toList()); }

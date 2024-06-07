@@ -126,8 +126,10 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping(path = "restore", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResp> restore(@Valid @RequestBody UserReq req) {
-        return (service.exist(req.email) && service.restorePassword(req.email)) ?
-                new ResponseEntity<>(UserResp.builder().msg("Restore email was send").build(), HttpStatus.OK) :
-                new ResponseEntity<>(UserResp.builder().msg("Internal error, try later").build(), HttpStatus.BAD_REQUEST);
+        if (service.exist(req.email)) {
+            service.restorePassword(req.email);
+            return new ResponseEntity<>(UserResp.builder().msg("Restore email was send").build(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(UserResp.builder().msg("You are not a user!").build(), HttpStatus.OK);
     }
 }

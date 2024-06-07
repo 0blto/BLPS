@@ -14,4 +14,6 @@ public interface OrderRepo extends JpaRepository<Order, OrderPK> {
     List<Order> getByOrderPK_OrderId(Long id);
 
     Order getByOrderPK_OrderIdAndOrderPK_ProductId(Long orderId, Long productId);
+
+    List<Order> getAllByStatus(Order.Status status);
 }

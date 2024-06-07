@@ -8,6 +8,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "orders")
 @Data
@@ -24,7 +26,9 @@ public class Order {
 
         RECEIVED,
 
-        RETURNED
+        RETURNED,
+
+        FOREVER
 
     }
 
@@ -40,6 +44,9 @@ public class Order {
 
     @NotNull
     Status status;
+
+    @NotNull
+    LocalDateTime lastUpdateTime;
 
 
 }

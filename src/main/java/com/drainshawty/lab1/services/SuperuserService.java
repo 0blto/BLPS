@@ -5,6 +5,7 @@ import com.drainshawty.lab1.repo.userdb.RoleRepo;
 import com.drainshawty.lab1.repo.userdb.UserRepo;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,20 +16,13 @@ import java.util.Optional;
 
 @Service
 @Data
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SuperuserService {
     UserRepo repo;
     BCryptPasswordEncoder encoder;
-    EmailService mailer;
     RoleRepo roleRepo;
 
-    @Autowired
-    public SuperuserService(UserRepo repo, BCryptPasswordEncoder encoder, RoleRepo roleRepo, EmailService mailer) {
-        this.repo = repo;
-        this.encoder = encoder;
-        this.mailer = mailer;
-        this.roleRepo = roleRepo;
-    }
 
     @Transactional
     public Optional<User> hire(String email) throws Exception {

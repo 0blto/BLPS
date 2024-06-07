@@ -5,9 +5,9 @@ import com.drainshawty.lab1.model.shoppingdb.Product;
 import com.drainshawty.lab1.repo.shoppingdb.ProductRepo;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +18,11 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Data
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductService {
 
     ProductRepo repo;
-    @Autowired
-    public ProductService(ProductRepo repo) {
-        this.repo = repo;
-    }
 
     @Transactional
     public Optional<Product> add(String name, String description, Long number, Long price) {
